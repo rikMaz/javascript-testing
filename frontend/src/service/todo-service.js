@@ -14,8 +14,10 @@ export const deleteTodo = async (id) => {
   return await axios.delete(`/api/todo/${id}`);
 };
 
-export const setTodoStatus = async (id, status) => {
-  return await axios.put(`/api/todo/${id}/status`, {
-    status: status,
+export const setTodo = async (id, description, status) => {
+  return await axios.put(`/api/todo/${id}`, {
+    id,
+    description,
+    status,
   });
 };
