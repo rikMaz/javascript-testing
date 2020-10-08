@@ -6,7 +6,8 @@ export const getTodos = async () => {
 
 export const addTodo = async (description) => {
   return await axios.post("/api/todo", {
-    description: description,
+    status: "OPEN",
+    description,
   });
 };
 
