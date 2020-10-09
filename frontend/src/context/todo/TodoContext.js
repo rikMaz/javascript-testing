@@ -1,13 +1,12 @@
 import React from "react";
 import { todoContextReducer } from "./todo-reducer";
-import exampleTodos from "./example-todos.json";
 
 export const TodoStateContext = React.createContext(undefined);
 export const TodoDispatchContext = React.createContext(undefined);
 
 export const TodoContextProvider = ({ children }) => {
   const [state, dispatch] = React.useReducer(todoContextReducer, {
-    todos: exampleTodos,
+    todos: [],
   });
   return (
     <TodoStateContext.Provider value={state}>
