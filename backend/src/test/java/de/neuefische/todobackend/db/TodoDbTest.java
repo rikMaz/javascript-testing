@@ -4,9 +4,11 @@ import de.neuefische.todobackend.model.TodoItem;
 import de.neuefische.todobackend.model.TodoStatus;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
 
 class TodoDbTest {
@@ -51,6 +53,22 @@ class TodoDbTest {
 
         //THEN
         assertThat(result.isEmpty(), is(true));
+    }
+
+    @Test
+    public void listShouldReturnAllItems(){
+        //GIVEN
+        db.addItem(new TodoItem("some-id", "some description", TodoStatus.OPEN));
+        db.addItem(new TodoItem("some-id-2", "some other description", TodoStatus.IN_PROGRESS));
+        db.addItem(new TodoItem("some-id-3", "description", TodoStatus.DONE));
+
+        //WHEN
+        List<TodoItem> items = db.list();
+
+        //THEN
+        assertThat(items, containsInAnyOrder(new TodoItem("some-id", "some description", TodoStatus.OPEN),
+        new TodoItem("some-id-2", "some other description", TodoStatus.IN_PROGRESS),
+        new TodoItem("some-id-3", "description", TodoStatus.DONE)));
     }
 
 }
