@@ -8,6 +8,7 @@ import de.neuefische.todobackend.utils.IdUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -71,4 +72,30 @@ class TodoServiceTest {
         verify(db).deleteItem("some-id");
     }
 
+    @Test
+    public void updateItemShouldUpdateDbItem(){
+        //GIVEN
+        when(db.getTodoItem("123")).thenReturn(Optional.of(new TodoItem("123", "old description", TodoStatus.IN_PROGRESS)));
+
+        //WHEN
+        Optional<TodoItem> updateItem = service.updateItem (new TodoItem("123", "some description", TodoStatus.OPEN));
+
+        //THEN
+        assertThat(updateItem.get(), is(new TodoItem("123", "some description", TodoStatus.OPEN)));
+        verify(db).updateItem(new TodoItem("123", "some description", TodoStatus.OPEN));
+    }
+
+
+
+    @Test
+    public void updateItemShouldReturnEmptyOptionalWhenIdNotFound(){
+        //GIVEN
+        when(db.getTodoItem("455")).thenReturn(Optional.empty());
+
+        //WHEN
+        Optional<TodoItem> updateItem = service.updateItem(new TodoItem("455", "some description", TodoStatus.OPEN));
+
+        //THEN
+        assertThat(updateItem.isEmpty(), is(true));
+    }
 }

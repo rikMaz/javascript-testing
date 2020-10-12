@@ -33,4 +33,9 @@ public class TodoDb {
         Optional<TodoItem> todoItem = getTodoItem(id);
         todoItem.ifPresent(items::remove);
     }
+
+    public void updateItem(TodoItem item) {
+        deleteItem(item.getId());
+        addItem(item);
+    }
 }

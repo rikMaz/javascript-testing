@@ -12,8 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -121,6 +120,81 @@ class TodoControllerTest {
         //THEN
         Optional<TodoItem> todoItem = todoDb.getTodoItem("first-item");
         assertThat(todoItem.isEmpty(), is(true));
+    }
+
+    @Test
+    public void updateTodoItem(){
+        //GIVEN
+        todoDb.addItem(new TodoItem(
+                "first-item",
+                "Some todo",
+                TodoStatus.IN_PROGRESS
+        ));
+
+        TodoItem updatedItem = new TodoItem(
+                "first-item",
+                "other description",
+                TodoStatus.OPEN
+        );
+
+        //WHEN
+        HttpEntity<TodoItem> entity = new HttpEntity<>(updatedItem);
+        ResponseEntity<TodoItem> response = restTemplate.exchange(getUrl() + "/first-item", HttpMethod.PUT, entity, TodoItem.class);
+
+        //THEN
+        TodoItem expectedItem = new TodoItem(
+                "first-item",
+                "other description",
+                TodoStatus.OPEN
+        );
+        assertThat(response.getStatusCode(), is(HttpStatus.OK));
+        assertThat(response.getBody(), is(expectedItem));
+        Optional<TodoItem> todoItem = todoDb.getTodoItem("first-item");
+        assertThat(todoItem.get(), is(expectedItem));
+
+    }
+
+    @Test
+    public void updateNotExistingTodoItemShouldReturnNotFound(){
+        //GIVEN
+        TodoItem updatedItem = new TodoItem(
+                "first-item",
+                "other description",
+                TodoStatus.OPEN
+        );
+
+        //WHEN
+        HttpEntity<TodoItem> entity = new HttpEntity<>(updatedItem);
+        ResponseEntity<String> response = restTemplate.exchange(getUrl() + "/first-item", HttpMethod.PUT, entity, String.class);
+
+        //THEN
+        assertThat(response.getStatusCode(), is(HttpStatus.NOT_FOUND));
+    }
+
+
+
+    @Test
+    public void updateTodoItemWithWrongIdShouldReturnBadRequest(){
+        //GIVEN
+        todoDb.addItem(new TodoItem(
+                "first-item",
+                "Some todo",
+                TodoStatus.IN_PROGRESS
+        ));
+
+        TodoItem updatedItem = new TodoItem(
+                "second-item",
+                "other description",
+                TodoStatus.OPEN
+        );
+
+        //WHEN
+        HttpEntity<TodoItem> entity = new HttpEntity<>(updatedItem);
+        ResponseEntity<String> response = restTemplate.exchange(getUrl() + "/first-item", HttpMethod.PUT, entity, String.class);
+
+        //THEN
+        assertThat(response.getStatusCode(), is(HttpStatus.BAD_REQUEST));
+
     }
 
 }

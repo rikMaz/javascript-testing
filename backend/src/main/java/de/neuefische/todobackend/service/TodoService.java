@@ -7,6 +7,7 @@ import de.neuefische.todobackend.utils.IdUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TodoService {
@@ -31,5 +32,14 @@ public class TodoService {
 
     public void deleteItem(String id) {
         db.deleteItem(id);
+    }
+
+    public Optional<TodoItem> updateItem(TodoItem item) {
+        Optional<TodoItem> oldItem = db.getTodoItem(item.getId());
+        if(oldItem.isEmpty()){
+            return Optional.empty();
+        }
+        db.updateItem(item);
+        return Optional.of(item);
     }
 }
