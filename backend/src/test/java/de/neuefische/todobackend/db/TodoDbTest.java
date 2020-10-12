@@ -86,5 +86,19 @@ class TodoDbTest {
         assertThat(todoItem.isEmpty(), is(true));
     }
 
+    @Test
+    public void updateTodoItemShouldReplaceOldItem(){
+        //GIVEN
+        db.addItem(new TodoItem("some-id", "some description", TodoStatus.OPEN));
+        db.addItem(new TodoItem("some-id-2", "some other description", TodoStatus.IN_PROGRESS));
+        db.addItem(new TodoItem("some-id-3", "description", TodoStatus.DONE));
+
+        //WHEN
+        db.updateItem(new TodoItem("some-id-2", "some new description", TodoStatus.OPEN));
+
+        //THEN
+        Optional<TodoItem> todoItem = db.getTodoItem("some-id-2");
+        assertThat(todoItem.get(), is(new TodoItem("some-id-2", "some new description", TodoStatus.OPEN)));
+    }
 
 }
