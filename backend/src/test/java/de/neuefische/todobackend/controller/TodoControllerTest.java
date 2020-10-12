@@ -101,4 +101,26 @@ class TodoControllerTest {
 
     }
 
+    @Test
+    public void deleteShouldDeleteItemFromDb(){
+        //GIVEN
+        todoDb.addItem(new TodoItem(
+                "first-item",
+                "Some todo",
+                TodoStatus.IN_PROGRESS
+        ));
+        todoDb.addItem(new TodoItem(
+                "second-item",
+                "Some todo",
+                TodoStatus.IN_PROGRESS
+        ));
+
+        //When
+        restTemplate.delete(getUrl()+"/first-item");
+
+        //THEN
+        Optional<TodoItem> todoItem = todoDb.getTodoItem("first-item");
+        assertThat(todoItem.isEmpty(), is(true));
+    }
+
 }

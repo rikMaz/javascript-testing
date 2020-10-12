@@ -28,4 +28,8 @@ public class TodoService {
     public List<TodoItem> listAllTodos() {
         return db.list();
     }
+
+    public void deleteItem(String id) {
+        db.deleteItem(id);
+    }
 }

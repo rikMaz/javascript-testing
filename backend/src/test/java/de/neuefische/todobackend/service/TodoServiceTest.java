@@ -62,4 +62,13 @@ class TodoServiceTest {
                 new TodoItem("some-id-2", "some other description", TodoStatus.IN_PROGRESS)));
     }
 
+    @Test
+    public void deleteItemShouldCallDeleteOnDb(){
+        //WHEN
+        service.deleteItem("some-id");
+
+        //THEN
+        verify(db).deleteItem("some-id");
+    }
+
 }

@@ -28,4 +28,9 @@ public class TodoDb {
     public void clear() {
         items.clear();
     }
+
+    public void deleteItem(String id) {
+        Optional<TodoItem> todoItem = getTodoItem(id);
+        todoItem.ifPresent(items::remove);
+    }
 }
