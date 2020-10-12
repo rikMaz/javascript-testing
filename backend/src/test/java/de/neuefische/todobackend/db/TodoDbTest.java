@@ -71,4 +71,20 @@ class TodoDbTest {
         new TodoItem("some-id-3", "description", TodoStatus.DONE)));
     }
 
+    @Test
+    public void deleteItemShouldRemoveItemFromDb(){
+        //GIVEN
+        db.addItem(new TodoItem("some-id", "some description", TodoStatus.OPEN));
+        db.addItem(new TodoItem("some-id-2", "some other description", TodoStatus.IN_PROGRESS));
+        db.addItem(new TodoItem("some-id-3", "description", TodoStatus.DONE));
+
+        //WHEN
+        db.deleteItem("some-id-2");
+
+        //THEN
+        Optional<TodoItem> todoItem = db.getTodoItem("some-id-2");
+        assertThat(todoItem.isEmpty(), is(true));
+    }
+
+
 }
