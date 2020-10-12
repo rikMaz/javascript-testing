@@ -4,6 +4,7 @@ import de.neuefische.todobackend.model.TodoItem;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,5 +19,13 @@ public class TodoDb {
 
     public void addItem(TodoItem item) {
         items.add(item);
+    }
+
+    public List<TodoItem> list() {
+        return Collections.unmodifiableList(items);
+    }
+
+    public void clear() {
+        items.clear();
     }
 }

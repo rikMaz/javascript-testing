@@ -6,6 +6,8 @@ import de.neuefische.todobackend.model.dto.AddTodoItemDto;
 import de.neuefische.todobackend.utils.IdUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TodoService {
 
@@ -23,4 +25,7 @@ public class TodoService {
         return todoItem;
     }
 
+    public List<TodoItem> listAllTodos() {
+        return db.list();
+    }
 }
