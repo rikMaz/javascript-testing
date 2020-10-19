@@ -1,10 +1,22 @@
 import React from 'react';
 import styled from 'styled-components';
 
-export default function Todo({ id, status, description }) {
+export default function Todo({ id, status, description, onDelete, onAdvance }) {
     return (
         <StyledTodo>
-            <h3>{description}</h3>
+            <h3>
+                {description} <small>[{status}]</small>
+            </h3>
+            <ButtonGroup>
+                {status !== 'DONE' && (
+                    <button
+                        onClick={() => onAdvance({ id, description, status })}
+                    >
+                        Advance
+                    </button>
+                )}
+                <button onClick={() => onDelete(id)}>Delete</button>
+            </ButtonGroup>
         </StyledTodo>
     );
 }
@@ -13,4 +25,9 @@ const StyledTodo = styled.section`
     padding: 8px;
     border: 1px solid salmon;
     border-radius: 8px;
+`;
+
+const ButtonGroup = styled.section`
+    display: flex;
+    justify-content: space-between;
 `;

@@ -2,12 +2,13 @@ import React from 'react';
 import Todo from './Todo';
 import styled from 'styled-components';
 
-export default function TodoList({ todos }) {
+export default function TodoList({ status, todos, onDelete, onAdvance }) {
+    const filteredTodos = todos.filter((todo) => todo.status === status);
     return (
         <StyledList>
-            {todos.map((todo) => (
+            {filteredTodos.map((todo) => (
                 <li key={todo.id}>
-                    <Todo {...todo} />
+                    <Todo {...todo} onDelete={onDelete} onAdvance={onAdvance} />
                 </li>
             ))}
         </StyledList>
