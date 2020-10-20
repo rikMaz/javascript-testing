@@ -12,3 +12,4 @@ export const removeTodo = (id) => axios.delete('/api/todo/' + id);
 
 export const updateTodo = (todo) =>
     axios.put('/api/todo/' + todo.id, todo).then((response) => response.data);
+
