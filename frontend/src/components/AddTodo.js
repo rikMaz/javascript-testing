@@ -5,16 +5,12 @@ export default function AddTodo({ onAdd }) {
 
     return (
         <form onSubmit={handleSubmit}>
-            <label>
-                Describe new todo
                 <input
                     type="text"
                     value={description}
                     onChange={(event) => setDescription(event.target.value)}
                 />
-            </label>
-
-            <button type="submit">Abschicken</button>
+            <button type="submit">New Todo</button>
         </form>
     );
 
