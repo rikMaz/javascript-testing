@@ -1,14 +1,18 @@
 import React from 'react';
 import Todo from './Todo';
 import styled from 'styled-components';
+import {useParams} from 'react-router-dom';
+import {slugToStatus} from "../service/status-service";
 
-export default function TodoList({ status, todos, onDelete, onAdvance }) {
+
+export default function TodoList({ todos, onAdvance }) {
+    const status = slugToStatus(useParams().status)
     const filteredTodos = todos.filter((todo) => todo.status === status);
     return (
         <StyledList>
             {filteredTodos.map((todo) => (
                 <li key={todo.id}>
-                    <Todo {...todo} onDelete={onDelete} onAdvance={onAdvance} />
+                    <Todo {...todo} onAdvance={onAdvance} />
                 </li>
             ))}
         </StyledList>
@@ -16,6 +20,7 @@ export default function TodoList({ status, todos, onDelete, onAdvance }) {
 }
 
 const StyledList = styled.ul`
+    overflow: scroll;
     list-style: none;
     padding: 0;
 
