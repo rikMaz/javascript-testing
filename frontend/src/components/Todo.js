@@ -1,22 +1,26 @@
 import React from 'react';
 import styled from 'styled-components';
+import {useHistory} from 'react-router-dom';
 
-export default function Todo({ id, status, description, onDelete, onAdvance }) {
+export default function Todo({ id, status, description, onAdvance, showButtons=true }) {
+
+    const history = useHistory()
+
     return (
         <StyledTodo>
             <h3>
                 {description} <small>[{status}]</small>
             </h3>
-            <ButtonGroup>
+            {showButtons && <ButtonGroup>
                 {status !== 'DONE' && (
                     <button
-                        onClick={() => onAdvance({ id, description, status })}
+                        onClick={() => onAdvance({id, description, status})}
                     >
                         Advance
                     </button>
                 )}
-                <button onClick={() => onDelete(id)}>Delete</button>
-            </ButtonGroup>
+                <button onClick={() => history.push(`/delete/${id}`)}>Delete</button>
+            </ButtonGroup>}
         </StyledTodo>
     );
 }

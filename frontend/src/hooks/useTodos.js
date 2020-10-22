@@ -5,6 +5,7 @@ import {
     removeTodo,
     updateTodo,
 } from '../service/todo-service';
+import {nextStatus} from "../service/status-service";
 
 export default function useTodos() {
     const [todos, setTodos] = useState([]);
@@ -24,7 +25,7 @@ export default function useTodos() {
         );
 
     const advance = (todo) => {
-        const status = todo.status === 'OPEN' ? 'IN_PROGRESS' : 'DONE';
+        const status = nextStatus(todo)
         updateTodo({ ...todo, status }).then((updatedTodo) =>
             setTodos([...todos.filter((t) => t.id !== todo.id), updatedTodo])
         );

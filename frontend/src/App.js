@@ -2,9 +2,11 @@ import React from 'react';
 import styled from 'styled-components/macro';
 import TodoList from './components/TodoList';
 import useTodos from './hooks/useTodos';
-import AddTodo from './components/AddTodo';
-import Search from "./components/Search";
 import useSearch from "./hooks/useSearch";
+import {Switch, Route, Redirect} from "react-router-dom";
+import Header from "./components/Header";
+import Navigation from "./components/Navigation";
+import DeleteConfirmation from "./components/DeleteConfirmation";
 
 export default function App() {
     const [todos, create, remove, advance] = useTodos();
@@ -12,53 +14,26 @@ export default function App() {
 
     return (
         <Main>
-            <Header>
-                <h1>Super Kanban Board </h1>
-                <AddTodo onAdd={create} />
-                <Search search={search} onChange={setSearch}/>
-            </Header>
-            <Board>
-                <TodoList
-                    status="OPEN"
-                    todos={filteredTodos}
-                    onDelete={remove}
-                    onAdvance={advance}
-                />
-                <TodoList
-                    status="IN_PROGRESS"
-                    todos={filteredTodos}
-                    onDelete={remove}
-                    onAdvance={advance}
-                />
-                <TodoList
-                    status="DONE"
-                    todos={filteredTodos}
-                    onDelete={remove}
-                    onAdvance={advance}
-                />
-            </Board>
+            <Header create={create} search={search} onSearch={setSearch}/>
+            <Switch>
+                <Route exact path="/">
+                    <Redirect to="/board/open"/>
+                </Route>
+                <Route path="/board/:status">
+                    <TodoList todos={filteredTodos} onAdvance={advance} />
+                </Route>
+                <Route path="/delete/:id">
+                    <DeleteConfirmation onDelete={remove} todos={todos}/>
+                </Route>
+            </Switch>
+            <Navigation />
         </Main>
     );
 }
 
-const Header = styled.header`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
-`
-
 const Main = styled.main`
     height: 100vh;
-    padding: 8px;
-
-    h1 {
-        color: hotpink;
-    }
-`;
-
-const Board = styled.section`
+    padding: 0 24px;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
+    grid-template-rows: auto 1fr auto;
 `;
